@@ -32,14 +32,43 @@ import Canvas from "@jworkshop/canvas";
 import "./style.css";
 
 class Example extends Component {
+
+  someFunction() {
+    const canvas = this.myCanvas;
+
+    const resizeHandler = (width, height) => { ... };
+
+    /** Bind an event handler to the resize event. */
+    canvas.onResize(resizeHandler);
+
+    /** Unbind an event handler to the resize event. */
+    canvas.removeResize(resizeHandler);
+
+    /** Retrieve the canvas react component. */
+    canvas.getCanvasElement();
+
+    /** Get the width of the canvas react component. */
+    canvas.getCanvasWidth();
+
+    /** Get the width of the canvas react component. */
+    canvas.getCanvasHeight();
+
+    /** Get the context of the canvas. */
+    canvas.getContext();
+
+    /** Get the image data of the canvas with a give area. */
+    canvas.getImageData(startX, startY, endX, endY);
+  }
+
   render() {
 
     return (
       <Canvas
+        ref={myCanvas => this.myCanvas = myCanvas}
         className="className"
-        style={}
+        style={ ... }
         canvasClassName="canvasClassName"
-        canvasStyle={}
+        canvasStyle={ ... }
         onResize={(width, height) => { ... }}
       />
     );

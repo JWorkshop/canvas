@@ -1,6 +1,6 @@
 {
   "name": "@jworkshop/canvas",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A canvas react UI component.",
   "author": "jworkshop <john.joydesign@gmail.com>",
   "keywords": ["canvas"],

@@ -46,7 +46,7 @@ class Canvas extends Component {
     super(props);
 
     this.resizeEvents = [];
-    this.resizeHandler = debounce(() => this.updateDimensions());
+    this._resizeHandler = debounce(() => this._updateDimensions());
 
     this.state = {
       width: 0,
@@ -54,25 +54,8 @@ class Canvas extends Component {
     };
   }
 
-  /** Add listener to the resize event. */
-  onResize(resizeEvent) {
-    if (typeof resizeEvent === "function") {
-      this.resizeEvents.push(resizeEvent);
-      return () => this.removeResize(resizeEvent);
-    }
-  }
-
-  /** Remove listener to the resize event. */
-  removeResize(resizeEvent) {
-    const index = this.resizeEvents.indexOf(resizeEvent);
-
-    if (index !== -1) {
-      this.resizeEvents.splice(index, 1);
-    }
-  }
-
   /** Perform action for resize event */
-  fireResizeEvent(width, height) {
+  _resize(width, height) {
     const { resizeEvents } = this;
 
     for (let i = 0; i < resizeEvents.length; i++) {
@@ -80,11 +63,11 @@ class Canvas extends Component {
     }
   }
 
-  updateDimensions() {
+  _updateDimensions() {
     const wrapper = this.wrapper;
     const { offsetWidth, offsetHeight } = wrapper;
 
-    this.fireResizeEvent(offsetWidth, offsetHeight);
+    this._resize(offsetWidth, offsetHeight);
 
     this.setState({
       width: offsetWidth,
@@ -92,35 +75,13 @@ class Canvas extends Component {
     });
   }
 
-  getCanvasElement() {
-    return this.canvas;
-  }
-
-  getCanvasWidth() {
-    return this.canvas.width;
-  }
-
-  getCanvasHeight() {
-    return this.canvas.height;
-  }
-
-  getContext() {
-    const canvas = this.canvas;
-
-    return canvas.getContext("2d");
-  }
-
-  getImageData(startX, startY, endX, endY) {
-    return this.getContext().getImageData(startX, startY, endX, endY);
-  }
-
-  mount() {
+  _mount() {
     const { onResize } = this.props;
     const wrapper = this.wrapper;
     const { offsetWidth, offsetHeight } = wrapper;
 
-    window.addEventListener("resize", this.resizeHandler, eventOptions);
-    wrapper.addEventListener("resize", this.resizeHandler, eventOptions);
+    window.addEventListener("resize", this._resizeHandler, eventOptions);
+    wrapper.addEventListener("resize", this._resizeHandler, eventOptions);
 
     this.setState({
       width: offsetWidth,
@@ -130,24 +91,73 @@ class Canvas extends Component {
     this.onResize(onResize);
   }
 
-  unmount() {
+  _unmount() {
     const { resizeEvents } = this;
     const wrapper = this.wrapper;
 
-    window.removeEventListener("resize", this.resizeHandler);
-    wrapper.removeEventListener("resize", this.resizeHandler);
+    window.removeEventListener("resize", this._resizeHandler);
+    wrapper.removeEventListener("resize", this._resizeHandler);
 
     for (var i = 0; i < resizeEvents.length; i++) {
       this.removeResize(resizeEvents[i]);
     }
   }
 
+  /** Bind an event handler to the resize event. */
+  onResize(resizeEvent) {
+    if (typeof resizeEvent === "function") {
+      this.resizeEvents.push(resizeEvent);
+      return () => this.removeResize(resizeEvent);
+    }
+  }
+
+  /** Unbind an event handler to the resize event. */
+  removeResize(resizeEvent) {
+    const index = this.resizeEvents.indexOf(resizeEvent);
+
+    if (index !== -1) {
+      this.resizeEvents.splice(index, 1);
+    }
+  }
+
+  /** Retrieve the canvas react component. */
+  getCanvasElement() {
+    return this.canvas;
+  }
+
+  /** Get the width of the canvas react component. */
+  getCanvasWidth() {
+    return this.canvas.width;
+  }
+
+  /** Get the height of the canvas react component. */
+  getCanvasHeight() {
+    return this.canvas.height;
+  }
+
+  /** Get the context of the canvas. */
+  getContext() {
+    const canvas = this.canvas;
+
+    return canvas.getContext("2d");
+  }
+
+  /** Get the image data of the canvas with a give area. */
+  getImageData(
+    startX = 0,
+    startY = 0,
+    endX = this.canvas.width,
+    endY = this.canvas.height
+  ) {
+    return this.getContext().getImageData(startX, startY, endX, endY);
+  }
+
   componentDidMount() {
-    this.mount();
+    this._mount();
   }
 
   componentWillUnmount() {
-    this.unmount();
+    this._unmount();
   }
 
   render() {
