@@ -32,17 +32,14 @@ import Canvas from "@jworkshop/canvas";
 import "./style.css";
 
 class Example extends Component {
+  constructor(props) {
+    super(props);
+
+    this.resizeHandler = this.resizeHandler.bind(this);
+  }
 
   someFunction() {
     const canvas = this.myCanvas;
-
-    const resizeHandler = (width, height) => { ... };
-
-    /** Bind an event handler to the resize event. */
-    canvas.onResize(resizeHandler);
-
-    /** Unbind an event handler to the resize event. */
-    canvas.removeResize(resizeHandler);
 
     /** Retrieve the canvas react component. */
     canvas.getCanvasElement();
@@ -60,6 +57,10 @@ class Example extends Component {
     canvas.getImageData(startX, startY, endX, endY);
   }
 
+  resizeHandler(width, height) {
+    // Do you stuff
+  }
+
   render() {
 
     return (
@@ -69,7 +70,7 @@ class Example extends Component {
         style={ ... }
         canvasClassName="canvasClassName"
         canvasStyle={ ... }
-        onResize={(width, height) => { ... }}
+        onResize={this.resizeHandler}
       />
     );
   }

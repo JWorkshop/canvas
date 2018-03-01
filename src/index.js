@@ -92,15 +92,12 @@ class Canvas extends Component {
   }
 
   _unmount() {
-    const { resizeEvents } = this;
     const wrapper = this.wrapper;
 
     window.removeEventListener("resize", this._resizeHandler);
     wrapper.removeEventListener("resize", this._resizeHandler);
 
-    for (var i = 0; i < resizeEvents.length; i++) {
-      this.removeResize(resizeEvents[i]);
-    }
+    this.clearResize();
   }
 
   /** Bind an event handler to the resize event. */
@@ -111,13 +108,18 @@ class Canvas extends Component {
     }
   }
 
-  /** Unbind an event handler to the resize event. */
+  /** Unbind an event handler from the resize event. */
   removeResize(resizeEvent) {
     const index = this.resizeEvents.indexOf(resizeEvent);
 
     if (index !== -1) {
       this.resizeEvents.splice(index, 1);
     }
+  }
+
+  /** Unbind all event handlers from the resize event. */
+  clearResize() {
+    this.resizeEvents = [];
   }
 
   /** Retrieve the canvas react component. */
