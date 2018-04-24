@@ -1,6 +1,6 @@
 {
   "name": "@jworkshop/canvas",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A canvas react UI component.",
   "author": "jworkshop <john.joydesign@gmail.com>",
   "keywords": ["canvas"],
@@ -17,15 +17,13 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "eslint": "^4.7.2",
     "eslint-plugin-react": "^7.7.0",
     "install": "^0.10.4",
     "node-sass": "^4.5.0",
-    "npm": "^5.7.1",
-    "npm-run-all": "^4.0.2",
-    "react-scripts": "^1.1.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
@@ -36,14 +34,16 @@
       "npm run build-css && babel src -d lib --copy-files --ignore *.scss"
   },
   "babel": {
-    "presets": ["env", "react"]
+    "presets": ["env", "react"],
+    "plugins": ["transform-object-rest-spread"]
   },
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 8,
       "sourceType": "module",
       "ecmaFeatures": {
-        "jsx": true
+        "jsx": true,
+        "experimentalObjectRestSpread": true
       }
     },
     "env": {

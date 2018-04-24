@@ -138,10 +138,8 @@ class Canvas extends Component {
   }
 
   /** Get the context of the canvas. */
-  getContext() {
-    const canvas = this.canvas;
-
-    return canvas.getContext("2d");
+  getContext(contextType = "2d") {
+    this.canvas.getContext(contextType);
   }
 
   /** Get the image data of the canvas with a give area. */
@@ -163,17 +161,17 @@ class Canvas extends Component {
   }
 
   render() {
-    const { className, style, canvasClassName, canvasStyle } = this.props;
+    const { className, canvasClassName, canvasStyle, ...rest } = this.props;
     const { width, height } = this.state;
 
     return (
       <div
-        ref={wrapper => (this.wrapper = wrapper)}
+        ref={w => (this.wrapper = w)}
         className={ClassNames("canvas-container", className)}
-        style={style}
+        {...rest}
       >
         <canvas
-          ref={canvas => (this.canvas = canvas)}
+          ref={c => (this.canvas = c)}
           className={canvasClassName}
           style={canvasStyle}
           width={width}
@@ -186,7 +184,6 @@ class Canvas extends Component {
 
 Canvas.propTypes = {
   className: PropTypes.string,
-  style: PropTypes.shape(),
   canvasClassName: PropTypes.string,
   canvasStyle: PropTypes.shape(),
   onResize: PropTypes.func
@@ -194,7 +191,6 @@ Canvas.propTypes = {
 
 Canvas.defaultProps = {
   className: "",
-  style: {},
   canvasClassName: "",
   canvasStyle: {},
   onResize: () => {}
