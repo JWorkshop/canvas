@@ -1,45 +1,12 @@
 import React, { Component } from "react";
 import ClassNames from "classnames";
 import PropTypes from "prop-types";
+import debounce from "debounce";
+import supportsPassive from "supports-passive";
 
 import "./style.css";
 
-let passiveSupported = false;
-
-try {
-  let options = Object.defineProperty({}, "passive", {
-    get: () => (passiveSupported = true)
-  });
-
-  window.addEventListener("test", null, options);
-} catch (error) {}
-
-const eventOptions = passiveSupported ? { passive: true } : false;
-
-const debounce = (method, wait, immediate) => {
-  let timeout;
-
-  return () => {
-    let context = this;
-    let args = arguments;
-
-    let later = function() {
-      timeout = null;
-      if (!immediate) {
-        method.apply(context, args);
-      }
-    };
-
-    let callNow = immediate && !timeout;
-
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-
-    if (callNow) {
-      method.apply(context, args);
-    }
-  };
-};
+const eventOptions = supportsPassive ? { passive: true } : false;
 
 class Canvas extends Component {
   constructor(props) {
@@ -76,8 +43,7 @@ class Canvas extends Component {
   }
 
   _mount() {
-    const { onResize } = this.props;
-    const wrapper = this.wrapper;
+    const { props, wrapper } = this;
     const { offsetWidth, offsetHeight } = wrapper;
 
     window.addEventListener("resize", this._resizeHandler, eventOptions);
@@ -88,7 +54,9 @@ class Canvas extends Component {
       height: offsetHeight
     });
 
-    this.onResize(onResize);
+    if (props.onResize) {
+      this.onResize(props.onResize);
+    }
   }
 
   _unmount() {
@@ -161,14 +129,15 @@ class Canvas extends Component {
   }
 
   render() {
-    const { className, canvasClassName, canvasStyle, ...rest } = this.props;
+    const { id, className, style, canvasClassName, canvasStyle } = this.props;
     const { width, height } = this.state;
 
     return (
       <div
         ref={w => (this.wrapper = w)}
+        id={id}
         className={ClassNames("canvas-container", className)}
-        {...rest}
+        style={style}
       >
         <canvas
           ref={c => (this.canvas = c)}
@@ -183,17 +152,12 @@ class Canvas extends Component {
 }
 
 Canvas.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
+  style: PropTypes.shape(),
   canvasClassName: PropTypes.string,
   canvasStyle: PropTypes.shape(),
   onResize: PropTypes.func
-};
-
-Canvas.defaultProps = {
-  className: "",
-  canvasClassName: "",
-  canvasStyle: {},
-  onResize: () => {}
 };
 
 export default Canvas;

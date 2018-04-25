@@ -1,6 +1,6 @@
 {
   "name": "@jworkshop/canvas",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "A canvas react UI component.",
   "author": "jworkshop <john.joydesign@gmail.com>",
   "keywords": ["canvas"],
@@ -13,17 +13,19 @@
     "@jworkshop/keyboard": "^0.0.3",
     "@jworkshop/mouse": "^0.0.3",
     "classnames": "^2.2.5",
-    "prop-types": "^15.6.1"
+    "debounce": "^1.1.0",
+    "prop-types": "^15.6.1",
+    "supports-passive": "0.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
-    "eslint": "^4.7.2",
+    "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "install": "^0.10.4",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.8.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
